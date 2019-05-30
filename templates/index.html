@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Radio VaioVaio</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/w3.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+</head>
+<body>
+	<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
+	  	<button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Leídas &times;</button>
+	  	<a href="#" class="w3-bar-item w3-button">Link 1</a>
+	  	<a href="#" class="w3-bar-item w3-button">Link 2</a>
+	  	<a href="#" class="w3-bar-item w3-button">Link 3</a>
+	</div>
+
+	<div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;" id="rightMenu">
+		<button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Por leer &times;</button>
+		{% for noticia in noticias%}
+			<a id="{{ noticia['id'] }}" href="#" class="w3-bar-item w3-button">{{ noticia["titulo"] }}</a>
+		{% endfor%}
+	</div>
+
+	<div class="w3-teal">
+
+	  	<button class="w3-button w3-teal w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
+	  	<button class="w3-button w3-teal w3-xlarge w3-right" onclick="openRightMenu()">&#9776;</button>
+	  	<div class="w3-container">
+	  	</div>
+	</div>
+
+	<div class="w3-container">
+		<p id="titulo" style="margin-left: 220px"></p>
+		<p id="encabezado" style="margin-left: 220px"></p>
+		<p id="cuerpo" style="margin-left: 220px"></p>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#001").click(function() {
+		    	$("#titulo").append("{{ noticia['titulo'] }}");
+			});
+		});
+		function openLeftMenu() {
+		  	document.getElementById("leftMenu").style.display = "block";
+		}
+
+		function closeLeftMenu() {
+		  	document.getElementById("leftMenu").style.display = "none";
+		}
+
+		function openRightMenu() {
+		  	document.getElementById("rightMenu").style.display = "block";
+		}
+
+		function closeRightMenu() {
+		  	document.getElementById("rightMenu").style.display = "none";
+		}
+	</script>
+</body>
+</html>
+
