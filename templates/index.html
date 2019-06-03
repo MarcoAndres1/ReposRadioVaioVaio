@@ -12,41 +12,32 @@
 <body>
 	<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
 	  	<button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Leídas &times;</button>
-	  	<a href="#" class="w3-bar-item w3-button">Link 1</a>
-	  	<a href="#" class="w3-bar-item w3-button">Link 2</a>
-	  	<a href="#" class="w3-bar-item w3-button">Link 3</a>
 	</div>
 
 	<div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;" id="rightMenu">
 		<button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Por leer &times;</button>
-		{% for noticia in noticias%}
-			<a id="{{ noticia['id'] }}" href="#" class="w3-bar-item w3-button">{{ noticia["titulo"] }}</a>
-		{% endfor%}
 	</div>
 
 	<div class="w3-teal">
 
-	  	<button class="w3-button w3-teal w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
-	  	<button class="w3-button w3-teal w3-xlarge w3-right" onclick="openRightMenu()">&#9776;</button>
+	  	<button id="openLeftMenu" class="w3-button w3-teal w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
+	  	<button id="openRightMenu" class="w3-button w3-teal w3-xlarge w3-right" onclick="openRightMenu()">&#9776;</button>
 	  	<div class="w3-container">
 	  	</div>
 	</div>
 
-	<div class="w3-container">
-		<p id="titulo" style="margin-left: 220px"></p>
-		<p id="encabezado" style="margin-left: 220px"></p>
-		<p id="cuerpo" style="margin-left: 220px"></p>
+	<div id="infoNoticia" class="w3-container w3-center">
+		<article>
+			<h1 id="titulo"></h1>
+			<p><strong id="encabezado"></strong></p>
+			<p id="cuerpo" style="text-align: center; white-space: pre-line"></p>
+		</article>
 	</div>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script>
-		$(document).ready(function(){
-			$("#001").click(function() {
-		    	$("#titulo").append("{{ noticia['titulo'] }}");
-			});
-		});
 		function openLeftMenu() {
 		  	document.getElementById("leftMenu").style.display = "block";
 		}
@@ -62,6 +53,49 @@
 		function closeRightMenu() {
 		  	document.getElementById("rightMenu").style.display = "none";
 		}
+	</script>
+	<script type="text/javascript">
+		var aCLickeado;
+		$(document).ready(function(){
+			$('#leftMenu').on("click", "a", function(){
+				aCLickeado = $(this).attr('id');
+				$.getJSON('http://localhost:8080/noticia/' + aCLickeado + "'", function(result){
+		      		$("#titulo").text(result.titulo);
+		      		$("#encabezado").text(result.encabezado);
+		      		$("#cuerpo").text(result.cuerpo);
+		    	});
+		    	$.ajax({
+			    	url: 'http://localhost:8080/nuevoEstado/' + aCLickeado + "'", 
+			        success: function(result){
+			        	console.log("Estado: leída");
+			    	}
+				});
+	        });
+	        $('#rightMenu').on("click", "a", function(){
+				aCLickeado = $(this).attr('id');
+				$.getJSON('http://localhost:8080/noticia/' + aCLickeado + "'", function(result){
+		      		$("#titulo").text(result.titulo);
+		      		$("#encabezado").text(result.encabezado);
+		      		$("#cuerpo").text(result.cuerpo);
+		    	});
+		    	$.ajax({
+			    	url: 'http://localhost:8080/nuevoEstado/' + aCLickeado + "'", 
+			        success: function(result){
+			        	console.log("Estado: leída");
+			    	}
+				});
+	        });
+	        $.getJSON('http://localhost:8080/porleer', function(result) {
+		        $.each(result, function(key,value) {
+		        	$("#rightMenu").append('<a id="' + value.id + '"' + 'href="#" class="w3-bar-item w3-button"' + '">' + value.titulo + '</a>');
+		        });
+			});
+			$.getJSON('http://localhost:8080/leidas', function(result) {
+		        $.each(result, function(key,value) {
+		        	$("#leftMenu").append('<a id="' + value.id + '"' + 'href="#" class="w3-bar-item w3-button"' + '">' + value.titulo + '</a>');
+			    }); 
+			});
+		});
 	</script>
 </body>
 </html>
