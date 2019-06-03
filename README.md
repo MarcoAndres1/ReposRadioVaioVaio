@@ -8,4 +8,4 @@
 
 	composer start
 	
-##Al clickear una noticia por leer, pasa al panel de las noticias leidas, pero solo al recargar. Es lo único que no hace de manera asíncrona.
+## Al clickear una noticia por leer, pasa al panel de las noticias leidas, pero solo al recargar. Es lo único que no hace de manera asíncrona.
